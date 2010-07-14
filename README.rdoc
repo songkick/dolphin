@@ -1,0 +1,11 @@
+= Dolphin
+
+The friendly feature flipper.
+
+== Todo
+
+This README, among other things. I wouldn’t use this quite yet.
+
+== License
+
+Copyright (c) 2010 Matt Johnson, released under the MIT license
