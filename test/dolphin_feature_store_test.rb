@@ -11,8 +11,7 @@ class DolphinStateTest < Test::Unit::TestCase
   end
 
   def teardown
-    features_file = File.join(TEST_FEATURE_STORE_PATH, 'feature_store.yml')
-    File.delete(features_file) if File.exist?(features_file)
+    clear_feature_store_files
   end
 
   def test_skips_feature_before_state_saved

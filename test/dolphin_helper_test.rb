@@ -10,6 +10,10 @@ class DolphinHelperTest < Test::Unit::TestCase
     Dolphin::FeatureStore.update_feature(:test_feature, :test_flipper)
   end
 
+  def teardown
+    clear_feature_store_files
+  end
+
   def test_call_block_if_feature_flipper_met
     context.request.env['CONDITION_FLAG'] = true
     context.use_feature
@@ -30,10 +34,8 @@ class DolphinHelperTest < Test::Unit::TestCase
   end
 
   def test_skip_block_if_no_request
-    context.no_request!
-    context.use_feature
-
-    assert_nil context.output
+    context_without_request.use_feature
+    assert_nil context_without_request.output
   end
 
 end

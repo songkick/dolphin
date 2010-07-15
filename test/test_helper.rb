@@ -9,20 +9,6 @@ module FeatureContextHelper
   class FeatureContext
     include Dolphin::Helper
 
-    class Request
-      def env
-        @env ||= {}
-      end
-    end
-
-    def no_request!
-      @request = nil
-    end
-
-    def request
-      @request ||= Request.new
-    end
-
     def use_feature
       feature :test_feature do
         @output = 'MMM, TUNA'
@@ -32,11 +18,32 @@ module FeatureContextHelper
     def output
       @output
     end
+  end
+
+  class FeatureContextWithRequest < FeatureContext
+    class Request
+      def env
+        @env ||= {}
+      end
+    end
+
+    def request
+      @request ||= Request.new
+    end
 
   end
 
   def context
-    @context ||= FeatureContext.new
+    @context ||= FeatureContextWithRequest.new
   end
 
+  def context_without_request
+    @context_without_request ||= FeatureContext.new
+  end
+
+end
+
+def clear_feature_store_files
+  features_file = File.join(TEST_FEATURE_STORE_PATH, 'feature_store.yml')
+  File.delete(features_file) if File.exist?(features_file)
 end

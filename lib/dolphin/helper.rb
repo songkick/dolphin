@@ -13,11 +13,10 @@ module Dolphin
   private
 
     def feature_available?(name)
-      feature_key = name.to_s
-      return unless flipper_key = features[feature_key]
+      return unless key = features[name.to_s]
 
-      if Dolphin.flippers[flipper_key] && defined?(request)
-        Dolphin.flippers[flipper_key].call(request)
+      if Dolphin.flippers[key] && defined?(request)
+        Dolphin.flippers[key].call(request)
       end
 
     rescue => e
