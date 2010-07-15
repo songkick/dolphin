@@ -33,7 +33,7 @@ module Dolphin
       end
 
       def file
-        File.join(path_prefix, 'feature_store.yml')
+        File.join(path_prefix, 'features.yml')
       end
 
       def path_prefix

@@ -44,6 +44,6 @@ module FeatureContextHelper
 end
 
 def clear_feature_store_files
-  features_file = File.join(TEST_FEATURE_STORE_PATH, 'feature_store.yml')
+  features_file = File.join(TEST_FEATURE_STORE_PATH, 'features.yml')
   File.delete(features_file) if File.exist?(features_file)
 end
