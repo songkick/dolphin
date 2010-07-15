@@ -5,10 +5,8 @@ class DolphinStateTest < Test::Unit::TestCase
 
   def setup
     Dolphin.configure do
-      rule(:rule_one) { |request| request.env['CONDITION_FLAG'] }
-      rule(:rule_two) { |request| true }
-
-      feature :test_feature, :rule_one
+      flipper(:flipper_one) { |request| request.env['CONDITION_FLAG'] }
+      flipper(:flipper_two) { |request| true }
     end
   end
 
@@ -23,7 +21,7 @@ class DolphinStateTest < Test::Unit::TestCase
   end
 
   def test_uses_feature_after_state_saved
-    Dolphin::FeatureStore.update_feature(:test_feature, :rule_two)
+    Dolphin::FeatureStore.update_feature(:test_feature, :flipper_two)
     context.use_feature
 
     assert_not_nil context.output

@@ -5,12 +5,12 @@ class DolphinHelperTest < Test::Unit::TestCase
 
   def setup
     Dolphin.configure do
-      rule(:test_rule) { |request| request.env['CONDITION_FLAG'] }
-      feature :test_feature, :test_rule
+      flipper(:test_flipper) { |request| request.env['CONDITION_FLAG'] }
     end
+    Dolphin::FeatureStore.update_feature(:test_feature, :test_flipper)
   end
 
-  def test_call_block_if_feature_rule_met
+  def test_call_block_if_feature_flipper_met
     context.request.env['CONDITION_FLAG'] = true
     context.use_feature
 
@@ -23,7 +23,7 @@ class DolphinHelperTest < Test::Unit::TestCase
     assert_nil context.output
   end
 
-  def test_skip_block_if_feature_rule_not_met
+  def test_skip_block_if_feature_flipper_not_met
     context.use_feature
 
     assert_nil context.output

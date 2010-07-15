@@ -8,19 +8,10 @@ class DolphinConfigureTest < Test::Unit::TestCase
 
   def test_configuration
     Dolphin.configure do
-      rule(:admin) { |request| true }
-      feature :admin_feature, :admin
+      flipper(:admin) { |request| true }
     end
   
-    assert_equal 'admin', Dolphin.features['admin_feature']
-  end
-
-  def test_configuring_feature_fails_without_rule
-    assert_raise Dolphin::MissingRuleError do
-      Dolphin.configure do
-        feature :admin_feature, :admin
-      end
-    end
+    assert_not_nil 'admin', Dolphin.flippers['admin']
   end
 
 end

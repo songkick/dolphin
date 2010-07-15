@@ -15,15 +15,15 @@ module Dolphin
       @features ||= {}
     end
 
-    def rules
-      @rules ||= {}
+    def flippers
+      @flippers ||= {}
     end
 
   private
 
     def clear!
       @features = {}
-      @rules    = {}
+      @flippers    = {}
     end
 
   end

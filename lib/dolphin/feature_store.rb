@@ -10,9 +10,9 @@ module Dolphin
         YAML.load_file(file)['features'] rescue {}
       end
 
-      def update_feature(feature, rule)
+      def update_feature(feature, flipper)
         stored_features               = features
-        stored_features[feature.to_s] = rule.to_s
+        stored_features[feature.to_s] = flipper.to_s
 
         save(stored_features)
       end

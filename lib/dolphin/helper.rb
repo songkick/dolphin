@@ -14,12 +14,10 @@ module Dolphin
 
     def feature_available?(name)
       feature_key = name.to_s
-      return unless Dolphin.features[feature_key]
+      return unless flipper_key = features[feature_key]
 
-      rule_key = stored_features[feature_key] || Dolphin.features[feature_key]
-
-      if Dolphin.rules[rule_key] && defined?(request)
-        Dolphin.rules[rule_key].call(request)
+      if Dolphin.flippers[flipper_key] && defined?(request)
+        Dolphin.flippers[flipper_key].call(request)
       end
 
     rescue => e
@@ -27,8 +25,8 @@ module Dolphin
       false
     end
 
-    def stored_features
-      @stored_features ||= FeatureStore.features
+    def features
+      @features ||= FeatureStore.features
     end
 
   end
