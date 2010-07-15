@@ -1,3 +1,5 @@
+require 'dolphin'
+
 namespace :dolphin do
 
   desc "Apply a flipper to a Dolphin feature.\nBoth flipper and feature must be pre-configured in your app for this to have any effect."
@@ -10,6 +12,7 @@ namespace :dolphin do
     end
 
     Dolphin::FeatureStore.update_feature(feature, flipper)
+    puts "Feature '#{feature}' is now using the flipper: #{flipper}"
   end
 
 end

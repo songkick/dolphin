@@ -2,17 +2,23 @@
 
 The friendly feature flipper.
 
-== Warning
-
-This hasn’t actually been used yet. So if you’re seeing this message, you might want to <b>hold off on using it</b> yourself.
+Dolphin is a Rails plugin to switch areas of your app on your off, based on pre-defined conditions.
 
 == Installation
 
-  Right now you’ll need to build the gem yourself before installing it.
+  script/plugin install git://github.com/grillpanda/dolphin.git
 
-=== Rails
+Or
 
-Configure Dolphin, adding some flippers. These are called later by the feature helper and determine whether a feature should be visible or not.
+  git submodule add git://github.com/grillpanda/dolphin.git vendor/plugins/dolphin
+  git submodule init
+  git submodule update
+
+== Configuration
+
+=== Define your flippers
+
+You’ll need to add some flippers. These are called later by the feature helper and determine whether a feature should be visible or not.
 
 In <b><tt>config/initializers/dolphin.rb</tt></b>:
   Dolphin.configure do
@@ -21,33 +27,23 @@ In <b><tt>config/initializers/dolphin.rb</tt></b>:
     flipper(:local) { |request| request.env['HTTP_X_FORWARDED_FOR'] == '127.0.0.1' }
   end
 
+=== Add some features
+
 Add <b><tt>config/dolphin/features.yml</tt></b> and configure some features:
 
   features:
     local_feature: local
     ultra_feature: off
 
-=== Other
+=== Include the helper
 
-Dolphin hasn’t been used outside of Rails. In theory, as long as you have a request object in scope where you’re including <tt>Dolphin::Helper</tt> you should be OK.
-
-Installation is much the same as for Rails, but Dolphin needs to know where to find features.yml, so the configure block looks like this:
-
-  Dolphin.configure do
-    flipper(:live)  { |request| true }
-    flipper(:false) { |request| false }
-    flipper(:local) { |request| request.env['HTTP_X_FORWARDED_FOR'] == '127.0.0.1' }
-
-    load_features_from CONFIG_DIRECTORY
-  end
-
-== Usage
-
-Include <tt>Dolphin::Helper</tt>. The helpers expect to have a request object in scope once included.
+The helpers expect to have a request object in scope once included.
 
   module ApplicationHelper
     include Dolphin::Helper
   end
+
+== Usage
 
 === Displaying a feature, or not
 
@@ -57,7 +53,7 @@ Wrap your awesomely volatile code in the feature helper:
     <h1>MMM, TUNA</h1>
   <% end %>
 
-Dolphin will run the flipper associated with the feature and run what’s in the feature block if the flipper is positive. If a feature or a flipper isn’t found, there’s an error with the flipper, whatever’s in the feature block won’t be run.
+Dolphin will call the flipper associated with the feature and run what’s in the feature block if the result is truthy. If a feature or a flipper isn’t found, or there’s an error with the flipper, whatever’s in the feature block won’t be run.
 
 === Updating a feature
 
