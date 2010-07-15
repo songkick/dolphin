@@ -11,19 +11,21 @@ module Dolphin
       DSL.new(self, &block)
     end
 
-    def features
-      @features ||= {}
-    end
-
     def flippers
-      @flippers ||= {}
+      @flippers ||= default_flippers
     end
 
   private
 
+    def default_flippers
+      {
+        'on'  => lambda { |request| true },
+        'off' => lambda { |request| false }
+      }
+    end
+
     def clear!
-      @features = {}
-      @flippers    = {}
+      @flippers = {}
     end
 
   end

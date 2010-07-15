@@ -27,13 +27,15 @@ In <b><tt>config/initializers/dolphin.rb</tt></b>:
     flipper(:local) { |request| request.env['HTTP_X_FORWARDED_FOR'] == '127.0.0.1' }
   end
 
+Dolphin has the flippers <tt>on</tt> and <tt>off</tt> baked in. These return <tt>true</tt> and <tt>false</tt> respectively.
+
 === Add some features
 
-Add <b><tt>config/dolphin/features.yml</tt></b> and configure some features:
+Add <b><tt>config/dolphin/features.yml</tt></b> and configure some features. You need to provide the name of your feature, and the name of the flipper it should use.
 
   features:
     local_feature: local
-    ultra_feature: off
+    disabled_feature: off
 
 === Include the helper
 
