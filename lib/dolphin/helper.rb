@@ -1,9 +1,14 @@
 module Dolphin
   module Helper
 
-    def feature(name, &block)
+    def feature(name, partial_options = {}, &block)
       return unless feature_available?(name)
-      block.call if block_given?
+
+      if partial_options[:partial] && respond_to?(:render)
+        render partial_options
+      elsif block_given?
+        block.call
+      end
     end
 
     def feature?(name)
