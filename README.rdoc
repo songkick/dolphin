@@ -1,18 +1,16 @@
 = Dolphin
 
-The friendly feature flipper.
-
-Dolphin is a Rails plugin to switch areas of your app on your off, based on pre-defined conditions.
+Dolphin is a feature flipper, as Rails plugin. Use it to flip areas of your app on your off, based on pre-defined conditions.
 
 == Installation
-
-  script/plugin install git://github.com/grillpanda/dolphin.git
-
-Or
 
   git submodule add git://github.com/grillpanda/dolphin.git vendor/plugins/dolphin
   git submodule init
   git submodule update
+
+Or
+
+  script/plugin install git://github.com/grillpanda/dolphin.git
 
 == Configuration
 
@@ -20,14 +18,15 @@ Or
 
 You’ll need to add some flippers. These are called later by the feature helper and determine whether a feature should be visible or not.
 
+Dolphin has the flippers <tt>on</tt> and <tt>off</tt> baked in. These return <tt>true</tt> and <tt>false</tt> respectively.
+
 In <b><tt>config/initializers/dolphin.rb</tt></b>:
   Dolphin.configure do
-    flipper(:live)  { |request| true }
-    flipper(:false) { |request| false }
-    flipper(:local) { |request| request.env['HTTP_X_FORWARDED_FOR'] == '127.0.0.1' }
+    flipper(:admin) { logged_in_user.admin? }
+    flipper(:local) { request.env['HTTP_X_FORWARDED_FOR'] == '127.0.0.1' }
   end
 
-Dolphin has the flippers <tt>on</tt> and <tt>off</tt> baked in. These return <tt>true</tt> and <tt>false</tt> respectively.
+Note that whatever methods or variables you use in your flipper blocks will need to be available to the scope in which you include <tt>Dolphin::Helper</tt>.
 
 === Add some features
 
@@ -37,9 +36,13 @@ Add <b><tt>config/dolphin/features.yml</tt></b> and configure some features. You
     local_feature: local
     disabled_feature: off
 
+<b>Important</b>: If you want to remember your feature settings between deploys, store <tt>features.yml</tt> somewhere that will survive them and link to it.
+
 === Include the helper
 
-The helpers expect to have a request object in scope once included.
+  module ApplicationController < ActionController::Base
+    include Dolphin::Helper
+  end
 
   module ApplicationHelper
     include Dolphin::Helper
@@ -49,7 +52,7 @@ The helpers expect to have a request object in scope once included.
 
 === Displaying a feature, or not
 
-Wrap your awesomely volatile code in the feature helper:
+Use your super-secret mondo-feature with the <tt>feature</tt> helper method.
 
   <% feature :local_feature do %>
     <h1>MMM, TUNA</h1>
@@ -57,15 +60,22 @@ Wrap your awesomely volatile code in the feature helper:
 
 Dolphin will call the flipper associated with the feature and run what’s in the feature block if the result is truthy. If a feature or a flipper isn’t found, or there’s an error with the flipper, whatever’s in the feature block won’t be run.
 
+You can check the availability of a feature using <tt>feature?</tt>
+
+  <%= link_to('TUNA FISH', tuna_path) if feature?(:tuna) %>
+
 === Updating a feature
 
   rake dolphin:update_feature[feature_name,rule_name]
+
+== Considerations
+
+Dolphin stores it’s feature configuration on disk, and needs to read it once per request. This hasn’t been a performance issue for us, but it’s something to keep in mind.
 
 == Todo
 
 * Allow multiple flippers per feature
 * Allow the option of rendering a partial, rather than giving a block to the feature helper
-* Remove dependency on request object
 
 == License
 

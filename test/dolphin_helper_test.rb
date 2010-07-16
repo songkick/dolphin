@@ -5,7 +5,7 @@ class DolphinHelperTest < Test::Unit::TestCase
 
   def setup
     Dolphin.configure do
-      flipper(:test_flipper) { |request| request.env['CONDITION_FLAG'] }
+      flipper(:test_flipper) { request.env['CONDITION_FLAG'] }
     end
     Dolphin::FeatureStore.update_feature(:test_feature, :test_flipper)
   end
@@ -33,8 +33,18 @@ class DolphinHelperTest < Test::Unit::TestCase
     assert_nil context.output
   end
 
-  def test_skip_block_if_no_request
-    context_without_request.use_feature
+  def test_do_not_explode_if_error_in_flipper
+    assert_nothing_raised do
+      suppress_errors do
+        context_without_request.use_feature
+      end
+    end
+  end
+
+  def test_skip_block_if_error_in_flipper
+    suppress_errors do
+      context_without_request.use_feature
+    end
     assert_nil context_without_request.output
   end
 

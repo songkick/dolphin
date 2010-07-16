@@ -19,13 +19,13 @@ module Dolphin
 
     def default_flippers
       {
-        'on'  => lambda { |request| true },
-        'off' => lambda { |request| false }
+        'on'  => lambda { true },
+        'off' => lambda { false }
       }
     end
 
     def clear!
-      @flippers = {}
+      @flippers = nil
     end
 
   end

@@ -1,4 +1,5 @@
 require 'test/unit'
+require 'tempfile'
 
 require File.expand_path('../lib/dolphin', File.dirname(__FILE__))
 
@@ -46,4 +47,19 @@ end
 def clear_feature_store_files
   features_file = File.join(TEST_FEATURE_STORE_PATH, 'features.yml')
   File.delete(features_file) if File.exist?(features_file)
+end
+
+def suppress_errors(&block)
+  file     = Tempfile.new('suppress_errors')
+  original = STDERR.dup
+
+  begin
+    STDERR.reopen(file)
+    block.call
+  rescue
+    file.flush
+    raise
+  ensure
+    STDERR.reopen(original)
+  end
 end

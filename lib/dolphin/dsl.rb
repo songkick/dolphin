@@ -13,9 +13,5 @@ module Dolphin
       @flipper_store.flippers[name.to_s] = block
     end
 
-    def load_features_from(path)
-      FeatureStore.custom_feature_path = path
-    end
-
   end
 end

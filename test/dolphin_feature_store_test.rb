@@ -5,8 +5,8 @@ class DolphinStateTest < Test::Unit::TestCase
 
   def setup
     Dolphin.configure do
-      flipper(:flipper_one) { |request| request.env['CONDITION_FLAG'] }
-      flipper(:flipper_two) { |request| true }
+      flipper(:flipper_one) { request.env['CONDITION_FLAG'] }
+      flipper(:flipper_two) { true }
     end
   end
 

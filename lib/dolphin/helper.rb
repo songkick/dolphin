@@ -15,12 +15,12 @@ module Dolphin
     def feature_available?(name)
       return unless key = features[name.to_s]
 
-      if Dolphin.flippers[key] && defined?(request)
-        Dolphin.flippers[key].call(request)
+      if flipper = Dolphin.flippers[key]
+        instance_eval(&flipper)
       end
 
     rescue => e
-      warn "[Dolphin] Error checking feature #{name} - #{e}"
+      warn "[Dolphin] Error checking feature #{name}:#{key} - #{e}"
       false
     end
 
