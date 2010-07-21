@@ -37,8 +37,7 @@ module Dolphin
       end
 
       def path_prefix
-        return rails_feature_path if rails?
-        custom_feature_path
+        custom_feature_path || rails_feature_path
       end
 
       def rails?
@@ -46,6 +45,8 @@ module Dolphin
       end
 
       def rails_feature_path
+        return unless rails?
+
         path = File.join(Rails.root, 'config', 'dolphin')
         FileUtils.mkdir_p path
         path
