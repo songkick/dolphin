@@ -1,0 +1,16 @@
+<h1>Hello</h1>
+
+<% feature :awesome do %>
+  <h2>Awesome</h2>
+<% end %>
+
+<% feature :secrets do %>
+  <h2>Secrets</h2>
+<% end %>
+
+<% feature :tunafish do %>
+  <h2>MMM, TUNA</h2>
+<% end %>
+
+<%= feature :partial, :partial => 'partial_feature' %>
+<%= feature :partial_with_options, :partial => 'partial_feature', :locals => { :message => 'Hear me' } %>

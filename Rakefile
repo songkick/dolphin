@@ -1,17 +1,8 @@
 require 'rake'
-require 'rake/testtask'
 require 'rake/rdoctask'
 
-desc 'Default: run unit tests.'
-task :default => :test
-
-desc 'Test the testing plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
+desc 'Default: Generate documentation for the dolphin plugin.'
+task :default => :rdoc
 
 desc 'Generate documentation for the dolphin plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|

@@ -7,7 +7,9 @@ module Dolphin
     class << self
 
       def features
-        YAML.load_file(file)['features'] rescue {}
+        YAML.load_file(feature_file) || {}
+      rescue
+        {}
       end
 
       def update_feature(feature, flipper)
@@ -17,43 +19,33 @@ module Dolphin
         save(stored_features)
       end
 
-    protected
+      def feature_directory
+        @custom_feature_directory || rails_feature_directory
+      end
 
-      def custom_feature_path=(path)
+      def feature_directory=(path)
         FileUtils.mkdir_p(path)
-        @custom_feature_path = path
+        @custom_feature_directory = path
       end
 
     private
 
       def save(updated_features)
-        File.open(file, 'w') do |f|
-          YAML.dump({'features' => updated_features}, f)
+        File.open(feature_file, 'w') do |f|
+          YAML.dump(updated_features, f)
         end
       end
 
-      def file
-        File.join(path_prefix, 'features.yml')
+      def feature_file
+        file = File.join(feature_directory, 'features.yml')
+        FileUtils.touch(file) unless File.exist?(file)
+        file
       end
 
-      def path_prefix
-        custom_feature_path || rails_feature_path
-      end
-
-      def rails?
-        defined?(Rails) && Rails.respond_to?(:root)
-      end
-
-      def rails_feature_path
-        return unless rails?
-
+      def rails_feature_directory
         path = File.join(Rails.root, 'config', 'dolphin')
         FileUtils.mkdir_p path
         path
-      end
-
-      def custom_feature_path
-        @custom_feature_path
       end
 
     end

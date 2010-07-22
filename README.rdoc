@@ -18,7 +18,7 @@ Or
 
 You’ll need to add some flippers. These are called later by the feature helper and determine whether a feature should be visible or not.
 
-Dolphin has the flippers <tt>on</tt> and <tt>off</tt> baked in. These return <tt>true</tt> and <tt>false</tt> respectively.
+Dolphin has the flippers <b><tt>enabled</tt></b> and <b><tt>disabled</tt></b> baked in. These return <tt>true</tt> and <tt>false</tt> respectively.
 
 In <b><tt>config/initializers/dolphin.rb</tt></b>:
   Dolphin.configure do
@@ -32,9 +32,8 @@ Note that whatever methods or variables you use in your flipper blocks will need
 
 Add <b><tt>config/dolphin/features.yml</tt></b> and configure some features. You need to provide the name of your feature, and the name of the flipper it should use.
 
-  features:
-    local_feature: local
-    disabled_feature: off
+  local_feature: local
+  disabled_feature: off
 
 <b>Important</b>: If you want to remember your feature settings between deploys, store <tt>features.yml</tt> somewhere that will survive them and link to it.
 
