@@ -37,7 +37,7 @@ module Dolphin
       end
 
       def feature_directory=(path)
-        FileUtils.mkdir_p(path)
+        FileUtils.mkdir_p(path) if path
         @custom_feature_directory = path
       end
 
