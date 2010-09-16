@@ -18,6 +18,17 @@ describe Dolphin::Helper do
       }
     end
     
+    describe "with an unrecognised feature" do
+      it "does not run the block annotated by the feature" do
+        Kernel.should_not_receive(:puts)
+        @helper_object.feature(:unknown_feature) { Kernel.puts "hello" }
+      end
+      
+      it "returns nil" do
+        @helper_object.feature(:unknown_feature) { :hello }.should == nil
+      end
+    end
+    
     describe "with a feature using the true flipper" do
       before do
         Dolphin::FeatureStore.update_feature(:true_feature, :true_flipper)
