@@ -18,7 +18,7 @@ module Dolphin
   private
 
     def feature_available?(name)
-      return unless key = features[name.to_s]
+      return false unless key = FeatureStore.features[name.to_s]
 
       if flipper = Dolphin.flippers[key]
         instance_eval(&flipper)
@@ -27,10 +27,6 @@ module Dolphin
     rescue => e
       warn "[Dolphin] Error checking feature #{name}:#{key} - #{e}"
       false
-    end
-
-    def features
-      @features ||= FeatureStore.features
     end
 
   end
