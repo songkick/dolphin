@@ -18,10 +18,6 @@ describe Dolphin::Helper do
       }
     end
     
-    it "raises an error for an unknown feature" do
-      lambda { @helper_object.feature(:unknown) {  } }.should raise_error(Dolphin::ConfigurationError)
-    end
-    
     describe "with a feature using the true flipper" do
       before do
         Dolphin::FeatureStore.update_feature(:true_feature, :true_flipper)

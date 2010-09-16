@@ -5,8 +5,6 @@ module Dolphin
   require 'dolphin/helper'
   require 'dolphin/feature_store'
 
-  class ConfigurationError < StandardError; end
-
   class << self
 
     def configure(&block)

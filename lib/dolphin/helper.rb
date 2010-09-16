@@ -2,10 +2,6 @@ module Dolphin
   module Helper
 
     def feature(name, partial_options = {}, &block)
-      unless features.has_key?(name.to_s)
-        raise ConfigurationError.new("Unknown Dolphin feature: #{name}")
-      end
-      
       return nil unless feature_available?(name)
 
       if partial_options[:partial] && respond_to?(:render)
