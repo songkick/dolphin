@@ -18,6 +18,10 @@ module Dolphin
 
         save(stored_features)
       end
+      
+      def clear!
+        save({})
+      end
 
       def feature_directory
         @custom_feature_directory || rails_feature_directory

@@ -1,3 +1,4 @@
+spec/config
 test_app/config/dolphin/
 test_app/log/*
 test_app/tmp/

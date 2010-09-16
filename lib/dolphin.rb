@@ -5,6 +5,8 @@ module Dolphin
   require 'dolphin/helper'
   require 'dolphin/feature_store'
 
+  class ConfigurationError < StandardError; end
+
   class << self
 
     def configure(&block)
@@ -15,6 +17,11 @@ module Dolphin
       @flippers ||= default_flippers
     end
 
+    def clear!
+      @flippers = nil
+      FeatureStore.clear!
+    end
+
   private
 
     def default_flippers
@@ -22,10 +29,6 @@ module Dolphin
         'enabled'  => lambda { true },
         'disabled' => lambda { false }
       }
-    end
-
-    def clear!
-      @flippers = nil
     end
 
   end
