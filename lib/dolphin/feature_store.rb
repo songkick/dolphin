@@ -39,6 +39,7 @@ module Dolphin
       def feature_directory=(path)
         FileUtils.mkdir_p(path) if path
         @custom_feature_directory = path
+        @last_read = @features = nil
       end
 
     private
