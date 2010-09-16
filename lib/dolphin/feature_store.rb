@@ -7,7 +7,15 @@ module Dolphin
     class << self
 
       def features
-        YAML.load_file(feature_file) || {}
+        path = feature_file
+        
+        if @last_read
+          mtime = File.mtime(path)
+          return @features if mtime.to_i <= @last_read.to_i
+        end
+        
+        @last_read = Time.now
+        @features  = YAML.load_file(path) || {}
       rescue
         {}
       end
@@ -20,6 +28,7 @@ module Dolphin
       end
       
       def clear!
+        @last_read = @features = nil
         save({})
       end
 
