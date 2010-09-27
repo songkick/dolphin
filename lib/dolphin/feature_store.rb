@@ -17,6 +17,7 @@ module Dolphin
         @last_read = Time.now
         @features  = YAML.load_file(path) || {}
       rescue
+        warn "[Dolphin] Error loading features - #{e} - #{e.backtrace.inspect}"
         {}
       end
 
