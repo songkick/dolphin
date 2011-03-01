@@ -47,6 +47,7 @@ module Dolphin
 
       def save(updated_features)
         File.open(feature_file, 'w') do |f|
+          f.sync = true
           YAML.dump(updated_features, f)
         end
       end
