@@ -67,10 +67,6 @@ You can check the availability of a feature using <tt>feature?</tt>
 
   <%= link_to('TUNA FISH', tuna_path) if feature?(:tuna) %>
 
-=== Updating a feature
-
-  rake dolphin:update_feature[feature_name,rule_name]
-
 == Considerations
 
 Dolphin stores it’s feature configuration on disk, and needs to read it once per request. This hasn’t been a performance issue for us, but it’s something to keep in mind.
