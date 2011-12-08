@@ -1,34 +1,46 @@
+require 'fileutils'
+require 'yaml'
+
+require 'dolphin/helper'
+require 'dolphin/feature_store'
+require 'dolphin/flipper_store'
+  
 module Dolphin
 
-  $LOAD_PATH << File.expand_path(File.dirname(__FILE__))
-  require 'dolphin/dsl'
-  require 'dolphin/helper'
-  require 'dolphin/feature_store'
+  def self.configure(&block)
+    FlipperStore::DSL.new(flipper_store, &block)
+  end
 
-  class << self
+  def self.flipper_store
+    @flipper_store ||= FlipperStore.new
+  end
 
-    def configure(&block)
-      DSL.new(self, &block)
+  def self.feature_store
+    @feature_store
+  end
+  
+  def self.init(feature_file)
+    @feature_store = FeatureStore.new(feature_file)
+  end
+
+  def self.feature_available?(name)
+    if flipper_name = feature_store[name]
+      if flipper = flipper_store[flipper_name]
+        instance_eval(&flipper)
+      else
+        false
+      end
+    else
+      false
     end
+  end
 
-    def flippers
-      @flippers ||= default_flippers
-    end
-
-    def clear!
-      @flippers = nil
-      FeatureStore.clear!
-    end
+  def self.clear
+    @flippers = nil
+    @feature_store = nil
+    @flipper_store = nil
+  end
 
   private
-
-    def default_flippers
-      {
-        'enabled'  => lambda { true },
-        'disabled' => lambda { false }
-      }
-    end
-
-  end
 
 end

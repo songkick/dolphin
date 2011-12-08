@@ -9,6 +9,8 @@ describe Dolphin::Helper do
   end
   
   before do
+    write_fixture_file("{}")
+    Dolphin.init(fixture_path)
     @helper_object = ViewObject.new
   end
   
@@ -37,7 +39,7 @@ describe Dolphin::Helper do
     
     describe "with a feature using the true flipper" do
       before do
-        Dolphin::FeatureStore.update_feature(:true_feature, :true_flipper)
+        Dolphin.feature_store.update_feature(:true_feature, :true_flipper)
       end
       
       it "runs the block annotated by the feature" do
@@ -52,7 +54,7 @@ describe Dolphin::Helper do
     
     describe "with a feature using the false flipper" do
       before do
-        Dolphin::FeatureStore.update_feature(:false_feature, :false_flipper)
+        Dolphin.feature_store.update_feature(:false_feature, :false_flipper)
       end
       
       it "does not run the block annotated by the feature" do
@@ -67,7 +69,7 @@ describe Dolphin::Helper do
     
     describe "rendering a partial" do
       before do
-        Dolphin::FeatureStore.update_feature(:true_feature, :true_flipper)
+        Dolphin.feature_store.update_feature(:true_feature, :true_flipper)
       end
 
       it "should call render passing through the options" do

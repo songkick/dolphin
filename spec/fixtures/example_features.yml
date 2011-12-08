@@ -1,0 +1,4 @@
+on_feature:                    enabled
+off_feature:                   disabled
+feature_without_a_flipper:     adsfjkl
+feature_with_a_custom_flipper: custom

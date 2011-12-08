@@ -1,9 +1,16 @@
-dir = File.expand_path(File.dirname(__FILE__))
+$:.unshift File.expand_path("../../lib", __FILE__)
+require 'dolphin'
 
-require dir + '/../lib/dolphin'
-Dolphin::FeatureStore.feature_directory = dir + '/config'
+def write_fixture_file(content)
+  File.open(fixture_path, "w") {|f| f.puts(content) }
+end
+
+def fixture_path
+  File.expand_path("../fixtures/tmp_features.yml", __FILE__)
+end
 
 Spec::Runner.configure do |config|
-  config.after { Dolphin.clear! }
+  config.before {  }
+  config.after  { Dolphin.clear }
 end
 
