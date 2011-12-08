@@ -4,7 +4,7 @@ require 'yaml'
 require 'dolphin/helper'
 require 'dolphin/feature_store'
 require 'dolphin/flipper_store'
-  
+
 module Dolphin
 
   def self.configure(&block)
@@ -24,14 +24,18 @@ module Dolphin
   end
 
   def self.feature_available?(name)
-    if flipper_name = feature_store[name]
-      if flipper = flipper_store[flipper_name]
-        instance_eval(&flipper)
+    if feature_store
+      if flipper_name = feature_store[name]
+        if flipper = flipper_store[flipper_name]
+          instance_eval(&flipper)
+        else
+          false
+        end
       else
         false
       end
     else
-      false
+      raise "Dolphin has not been initialized with a features file"
     end
   end
 

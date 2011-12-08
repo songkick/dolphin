@@ -34,4 +34,11 @@ describe Dolphin do
     Dolphin.feature_available?(:nonexistant_feature).should == false
     Dolphin.feature_available?("nonexistant_feature").should == false
   end
+  
+  it "raises a helpful exception if it has not been initialized" do
+    Dolphin.clear
+    lambda {
+      Dolphin.feature_available?(:adsf)
+    }.should raise_error("Dolphin has not been initialized with a features file")
+  end
 end
