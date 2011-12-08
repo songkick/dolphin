@@ -40,7 +40,4 @@ module Dolphin
     @feature_store = nil
     @flipper_store = nil
   end
-
-  private
-
 end
