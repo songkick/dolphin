@@ -1,9 +1,15 @@
 require 'spec_helper'
 
 describe Dolphin::Helper do
+  class ViewObject
+    include Dolphin::Helper
+    
+    def render(*args)
+    end
+  end
+  
   before do
-    @helper_class  = Class.new { include Dolphin::Helper }
-    @helper_object = @helper_class.new
+    @helper_object = ViewObject.new
   end
   
   it "responds to :feature" do
@@ -58,6 +64,19 @@ describe Dolphin::Helper do
         @helper_object.feature(:false_feature) { :hello }.should == nil
       end
     end
+    
+    describe "rendering a partial" do
+      before do
+        Dolphin::FeatureStore.update_feature(:true_feature, :true_flipper)
+      end
+
+      it "should call render passing through the options" do
+        @helper_object.should_receive(:render).with(:partial => :qux, :foo => :bar)
+        @helper_object.feature(:true_feature, :partial => :qux, :foo => :bar)
+      end
+    end
   end
 end
+
+
 
