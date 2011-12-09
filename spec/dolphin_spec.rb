@@ -41,4 +41,16 @@ describe Dolphin do
       Dolphin.feature_available?(:adsf)
     }.should raise_error("Dolphin has not been initialized with a features file")
   end
+  
+  it "says all features are off if the file doesn't exist" do
+    Dolphin.init("/asdfasdfadsf")
+    Dolphin.feature_available?(:adsf).should be_false
+  end
 end
+
+
+
+
+
+
+

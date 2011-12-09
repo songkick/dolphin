@@ -4,14 +4,7 @@ module Dolphin
   class FeatureStore
     def initialize(feature_file)
       @feature_file = File.expand_path(feature_file)
-      if File.exist?(feature_file)
-        if YAML.load_file(feature_file)
-        else
-          raise "dolphin feature file at #{feature_file} is not valid YAML"
-        end
-      else
-        raise "missing dolphin feature file at #{feature_file}"
-      end
+      @features     = read_file
     end
     
     attr_reader :feature_file
@@ -21,13 +14,11 @@ module Dolphin
     end
     
     def features
-      if @last_read
-        mtime = File.mtime(feature_file)
-        return @features if mtime.to_i <= @last_read.to_i
+      unless file_updated?
+        return @features
       end
       
-      @last_read = Time.now
-      @features  = YAML.load_file(feature_file) || {}
+      @features = read_file
     end
 
     def update_feature(feature, flipper)
@@ -43,6 +34,27 @@ module Dolphin
     end
 
     private
+    
+    def read_file
+      @last_read = Time.now
+      if File.exist?(feature_file)
+        YAML.load_file(feature_file)
+      else
+        {}
+      end
+    end
+    
+    def file_updated?
+      if @last_read
+        if File.exist?(feature_file)
+          File.mtime(feature_file).to_i > @last_read.to_i
+        else
+          false
+        end
+      else
+        true
+      end
+    end
 
     def save(updated_features)
       File.open(feature_file, 'w') do |f|

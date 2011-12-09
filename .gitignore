@@ -4,3 +4,4 @@ test_app/log/*
 test_app/tmp/
 pkg
 rdoc
+.redcar
