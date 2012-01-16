@@ -32,8 +32,14 @@ module Dolphin
 
     def self.default_flippers
       @default_flippers ||= {
-        'enabled'  => lambda { true },
-        'disabled' => lambda { false }
+        'enabled'     => lambda { true },
+        'disabled'    => lambda { false },
+        'chance_1pc'  => lambda { rand < 0.01 },
+        'chance_2pc'  => lambda { rand < 0.02 },
+        'chance_5pc'  => lambda { rand < 0.05 },
+        'chance_10pc' => lambda { rand < 0.1 },
+        'chance_20pc' => lambda { rand < 0.2 },
+        'chance_50pc' => lambda { rand < 0.5 }
       }
     end
   end
