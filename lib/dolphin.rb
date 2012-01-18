@@ -20,8 +20,8 @@ module Dolphin
     @feature_store
   end
   
-  def self.experiment(name, &block)
-    experiment = Dolphin::Experiment.new(name, &block)
+  def self.experiment(name, logger=nil, &block)
+    experiment = Dolphin::Experiment.new(name, logger, &block)
     experiment.run
   end
   
