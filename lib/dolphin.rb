@@ -4,6 +4,7 @@ require 'yaml'
 require 'dolphin/helper'
 require 'dolphin/feature_store'
 require 'dolphin/flipper_store'
+require 'dolphin/experiment'
 
 module Dolphin
 
@@ -17,6 +18,11 @@ module Dolphin
 
   def self.feature_store
     @feature_store
+  end
+  
+  def self.experiment(name, &block)
+    experiment = Dolphin::Experiment.new(name, &block)
+    experiment.run
   end
   
   def self.init(feature_file)
