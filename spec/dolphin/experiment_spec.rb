@@ -25,6 +25,20 @@ describe Dolphin::Experiment do
     }.should raise_error("must define existing implementation")
   end
   
+  it "should swallow errors in the experimental block" do
+    Dolphin.stub!(:feature_available?).with(:sdf).and_return(true)
+    logger = stub("logger")
+    logger.should_receive(:error)
+    Dolphin.experiment("foo", logger) do |feature|
+      feature.existing do
+        101
+      end
+      feature.experimental(:sdf) do
+        raise "hell"
+      end
+      feature.use_experimental_result?(:sdf)
+    end.should == 101
+  end
   
   it "should return existing implementation and not run experimental by default" do
     experimental_run = false
