@@ -107,7 +107,7 @@ describe Dolphin::Experiment do
   it "should compare the values and log if they are different" do
     Dolphin.stub!(:feature_available?).with(:experimental_feature).and_return(true)
     logger = stub("logger")
-    logger.should_receive(:warn).with("foo: experimental value differs, expected #{101} got #{202}")
+    logger.should_receive(:warn).with("foo: experimental value differs")
     Dolphin.experiment("foo", logger) do |feature|
       feature.existing do
         101

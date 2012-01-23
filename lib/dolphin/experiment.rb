@@ -26,7 +26,7 @@ module Dolphin
       if Dolphin.feature_available?(@experimental_feature_name)
         experimental_result = @experimental.call
         if @logger and existing_result != experimental_result
-          @logger.warn("#{@name}: experimental value differs, expected #{existing_result.inspect} got #{experimental_result.inspect}")
+          @logger.warn("#{@name}: experimental value differs")
         end
         @use_experimental_result ? experimental_result : existing_result
       else
