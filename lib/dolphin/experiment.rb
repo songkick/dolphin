@@ -24,11 +24,16 @@ module Dolphin
       raise "must define existing implementation" unless @existing
       existing_result = @existing.call
       if Dolphin.feature_available?(@experimental_feature_name)
-        experimental_result = @experimental.call
-        if @logger and existing_result != experimental_result
-          @logger.warn("#{@name}: experimental value differs")
+        begin
+          experimental_result = @experimental.call
+          if @logger and existing_result != experimental_result
+            @logger.warn("#{@name}: experimental value differs")
+          end
+          @use_experimental_result ? experimental_result : existing_result
+        rescue Object => e
+          @logger.error(e)
+          existing_result
         end
-        @use_experimental_result ? experimental_result : existing_result
       else
         existing_result
       end
