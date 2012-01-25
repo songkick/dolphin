@@ -26,19 +26,39 @@ describe Dolphin::Experiment do
   end
   
   it "should swallow errors in the experimental block" do
-    Dolphin.stub!(:feature_available?).with(:sdf).and_return(true)
+    Dolphin.stub!(:feature_available?).with(:exp).and_return(true)
+    Dolphin.stub!(:feature_available?).with(:exposed).and_return(false)
     logger = stub("logger")
     logger.should_receive(:error)
     Dolphin.experiment("foo", logger) do |feature|
       feature.existing do
         101
       end
-      feature.experimental(:sdf) do
+      feature.experimental(:exp) do
         raise "hell"
       end
-      feature.use_experimental_result?(:sdf)
+      feature.use_experimental_result?(:exposed)
     end.should == 101
   end
+
+  it "should not swallow errors in the experimental block if exposed" do
+    Dolphin.stub!(:feature_available?).with(:exp).and_return(true)
+    Dolphin.stub!(:feature_available?).with(:exposed).and_return(true)
+    logger = stub("logger")
+    logger.should_not_receive(:error)
+    lambda {
+      Dolphin.experiment("foo", logger) do |feature|
+        feature.existing do
+          101
+        end
+        feature.experimental(:exp) do
+          raise "hell"
+        end
+        feature.use_experimental_result?(:exposed)
+      end
+    }.should raise_error("hell")
+  end
+  
   
   it "should return existing implementation and not run experimental by default" do
     experimental_run = false

@@ -31,8 +31,12 @@ module Dolphin
           end
           @use_experimental_result ? experimental_result : existing_result
         rescue Object => e
-          @logger.error(e)
-          existing_result
+          if @use_experimental_result
+            raise e
+          else
+            @logger.error(e)
+            existing_result
+          end
         end
       else
         existing_result
