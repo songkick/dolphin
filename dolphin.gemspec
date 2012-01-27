@@ -1,7 +1,7 @@
 
 spec = Gem::Specification.new do |s|
   s.name              = "dolphin"
-  s.version           = "0.8"
+  s.version           = "0.9"
   s.summary           = "The friendly feature flipper"
   s.author            = "Matt Johnson"
   s.email             = "grillpanda@gmial.com"
