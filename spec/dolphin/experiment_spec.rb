@@ -138,37 +138,130 @@ describe Dolphin::Experiment do
     experimental_run.should be_true
   end
   
-  it "should compare the values and log if they are different" do
-    Dolphin.stub!(:feature_available?).with(:experimental_feature).and_return(true)
-    logger = stub("logger")
-    logger.should_receive(:warn).with("foo: experimental value differs")
-    Dolphin.experiment("foo", logger) do |feature|
-      feature.existing do
-        101
-      end
-      
-      feature.experimental(:experimental_feature) do
-        202
+  describe "result comparison" do
+    before do
+      Dolphin.stub!(:feature_available?).with(:experimental_feature).and_return(true)
+      @logger = stub("logger")
+    end
+    
+    it "should compare the values and log if they are different" do
+      @logger.should_receive(:warn).with("foo: experimental value differs")
+      Dolphin.experiment("foo", @logger) do |feature|
+        feature.existing do
+          101
+        end
+        
+        feature.experimental(:experimental_feature) do
+          202
+        end
       end
     end
-  end
-  
-  it "should not log if they are the same" do
-    Dolphin.stub!(:feature_available?).with(:experimental_feature).and_return(true)
-    logger = stub("logger")
-    logger.should_not_receive(:warn)
-    Dolphin.experiment("foo", logger) do |feature|
-      feature.existing do
-        101
-      end
-      
-      feature.experimental(:experimental_feature) do
-        101
+    
+    it "should not log if they are the same" do
+      @logger.should_not_receive(:warn)
+      Dolphin.experiment("foo", @logger) do |feature|
+        feature.existing do
+          101
+        end
+        
+        feature.experimental(:experimental_feature) do
+          101
+        end
       end
     end
+    
+    it "can optionally log the values as well" do
+      Dolphin.stub!(:feature_available?).with(:should_log_data_feature).and_return(true)
+      @logger.should_receive(:warn).with("foo: experimental value differs, expected #{101} got #{202}")
+      
+      Dolphin.experiment("foo", @logger) do |feature|
+        feature.existing do
+          101
+        end
+        
+        feature.experimental(:experimental_feature) do
+          202
+        end
+        
+        feature.compare_and_log_data_if(:should_log_data_feature)
+      end
+    end
+    
+    it "can optionally log the values as well, or not" do
+      Dolphin.stub!(:feature_available?).with(:should_log_data_feature).and_return(false)
+      @logger.should_receive(:warn).with("foo: experimental value differs")
+      
+      Dolphin.experiment("foo", @logger) do |feature|
+        feature.existing do
+          101
+        end
+        
+        feature.experimental(:experimental_feature) do
+          202
+        end
+        
+        feature.compare_and_log_data_if(:should_log_data_feature)
+      end
+    end
+    
+    it "can use a transform block if one is provided" do
+      @logger.should_receive(:warn).with("foo: experimental value differs")
+      
+      Dolphin.experiment("foo", @logger) do |feature|
+        feature.existing do
+          [3, 2, 1]
+        end
+        
+        feature.experimental(:experimental_feature) do
+          [1, 2, 3]
+        end
+        
+        feature.compare_and_log_data_if(nil) do |obj|
+          obj.sort
+        end
+      end
+      
+    end    
+    
+    it "can use a transform block if one is provided 2" do
+      @logger.should_receive(:warn).with("foo: experimental value differs")
+      
+      Dolphin.experiment("foo", @logger) do |feature|
+        feature.existing do
+          [3, 2, 1]
+        end
+        
+        feature.experimental(:experimental_feature) do
+          [1, 2, 3]
+        end
+        
+        feature.compare_and_log_data_if(nil) do |obj|
+          obj
+        end
+      end
+    end    
+    
+    it "can use a transform block if one is provided and log the differences" do
+      Dolphin.stub!(:feature_available?).with(:should_log_data_feature).and_return(true)
+      @logger.should_receive(:warn).with("foo: experimental value differs, expected [3, 2, 1] got [1, 2, 3]")
+      
+      Dolphin.experiment("foo", @logger) do |feature|
+        feature.existing do
+          [3, 2, 1]
+        end
+        
+        feature.experimental(:experimental_feature) do
+          [1, 2, 3]
+        end
+        
+        feature.compare_and_log_data_if(:should_log_data_feature) do |obj|
+          obj
+        end
+      end
+      
+    end    
   end
-end
+end    
   
-
-
-
+  
+  
