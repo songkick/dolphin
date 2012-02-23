@@ -40,7 +40,23 @@ describe Dolphin::FeatureStore do
       Dolphin::FeatureStore.new(fixture_path)["foo"].should == "qux"
       Dolphin::FeatureStore.new(fixture_path)[:foo].should == "qux"
     end
-    
+
+    context 'with 2 features' do
+      before do
+        write_fixture_file({"foo" => "enabled", "bar" => "disabled"}.to_yaml)
+      end
+
+      context 'when one of them is deleted' do
+        it "deletes features on disc" do
+          store = Dolphin::FeatureStore.new(fixture_path)
+          store.delete_feature(:bar)
+          Dolphin::FeatureStore.new(fixture_path)['foo'].should == 'enabled'
+          Dolphin::FeatureStore.new(fixture_path).features.keys.size.should == 1
+          Dolphin::FeatureStore.new(fixture_path).features.has_key?('bar').should be_false
+        end
+      end
+    end
+
     it "should only read from disk once to get features" do
       YAML.should_receive(:load_file).once.and_return({"foo" => "enabled"})
       store = Dolphin::FeatureStore.new(fixture_path)

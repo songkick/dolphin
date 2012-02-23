@@ -28,6 +28,13 @@ module Dolphin
       save(stored_features)
     end
     
+    def delete_feature(feature)
+      stored_features = features
+      stored_features.delete(feature.to_s)
+
+      save(stored_features)
+    end
+
     def clear
       @last_read = @features = nil
       save({})
