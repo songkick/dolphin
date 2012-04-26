@@ -29,6 +29,10 @@ module Dolphin
     @feature_store = FeatureStore.new(feature_file)
   end
 
+  def self.init_with_store(feature_store)
+    @feature_store = feature_store
+  end
+
   def self.feature_available?(name)
     if feature_store
       if flipper_name = feature_store[name]

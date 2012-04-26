@@ -46,11 +46,17 @@ describe Dolphin do
     Dolphin.init("/asdfasdfadsf")
     Dolphin.feature_available?(:adsf).should be_false
   end
+
+  context "with a custom feature store" do
+    let(:feature_store) { mock(:feature_store, :'[]' => 'enabled') }
+
+    before do
+      Dolphin.init_with_store(feature_store)
+    end
+
+    it "should call the custom feature store" do
+      feature_store.should_receive(:'[]').with('my_feature').and_return('enabled')
+      Dolphin.feature_available?('my_feature')
+    end
+  end
 end
-
-
-
-
-
-
-
