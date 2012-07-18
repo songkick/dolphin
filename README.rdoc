@@ -1,6 +1,7 @@
 = Dolphin
 
 {<img src="https://secure.travis-ci.org/songkick/dolphin.png?branch=master" alt="Build Status" />}[http://travis-ci.org/songkick/dolphin]
+{<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/songkick/dolphin]
 
 Dolphin is a feature flipper, as Rails plugin. Use it to flip areas of your app on your off, based on pre-defined conditions.
 
